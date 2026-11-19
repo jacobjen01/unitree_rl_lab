@@ -4,8 +4,10 @@ export UNITREE_RL_LAB_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/nul
 
 if ! [[ -z "${CONDA_PREFIX}" ]]; then
     python_exe=${CONDA_PREFIX}/bin/python
+elif ! [[ -z "${VIRTUAL_ENV}" ]]; then
+    python_exe=${VIRTUAL_ENV}/bin/python
 else
-    echo "[Error] No conda environment activated. Please activate the conda environment first."
+    echo "[Error] No conda or python virtual environment activated. Please activate one first."
     # exit 1
 fi
 
@@ -63,7 +65,9 @@ case "$1" in
     -i|--install)
         git lfs install # ensure git lfs is installed
         pip install -e ${UNITREE_RL_LAB_PATH}/source/unitree_rl_lab/
-        _ut_setup_conda_env
+        if ! [[ -z "${CONDA_PREFIX}" ]]; then
+            _ut_setup_conda_env
+        fi
         activate-global-python-argcomplete
         ;;
     -l|--list)
