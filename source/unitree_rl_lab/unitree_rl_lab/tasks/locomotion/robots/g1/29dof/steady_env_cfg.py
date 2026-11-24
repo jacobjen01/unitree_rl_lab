@@ -48,3 +48,31 @@ class SteadyRobotPlayEnvCfg(SteadyRobotEnvCfg):
         self.scene.terrain.terrain_generator.num_rows = 2
         self.scene.terrain.terrain_generator.num_cols = 10
         self.commands.base_velocity.ranges = self.commands.base_velocity.limit_ranges
+
+
+@configclass
+class SteadyTurnRobotEnvCfg(SteadyRobotEnvCfg):
+    """Steady task with turning trained over the full range from the start.
+
+    In the Steady run (2026-11-19_16-24-18) the yaw curriculum never grew: ang_vel_cmd_levels only
+    widens the range when track_ang_vel_z's per-second episode reward exceeds 0.8 x its weight, and
+    the per-step torso twist kept it at ~0.69 (max 0.71). The policy therefore only ever trained
+    turning commands of +-0.1 rad/s. Here the yaw range is +-0.5 rad/s from iteration 0 and the
+    yaw curriculum is removed. Walking speed keeps its curriculum (that one works).
+    """
+
+    def __post_init__(self):
+        super().__post_init__()
+        self.commands.base_velocity.ranges.ang_vel_z = (-0.5, 0.5)
+        self.commands.base_velocity.limit_ranges.ang_vel_z = (-0.5, 0.5)
+        self.curriculum.ang_vel_cmd_levels = None
+
+
+@configclass
+class SteadyTurnRobotPlayEnvCfg(SteadyTurnRobotEnvCfg):
+    def __post_init__(self):
+        super().__post_init__()
+        self.scene.num_envs = 32
+        self.scene.terrain.terrain_generator.num_rows = 2
+        self.scene.terrain.terrain_generator.num_cols = 10
+        self.commands.base_velocity.ranges = self.commands.base_velocity.limit_ranges

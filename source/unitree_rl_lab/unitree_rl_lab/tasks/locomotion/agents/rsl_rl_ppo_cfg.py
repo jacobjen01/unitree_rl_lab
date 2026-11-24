@@ -34,3 +34,15 @@ class BasePPORunnerCfg(RslRlOnPolicyRunnerCfg):
         desired_kl=0.01,
         max_grad_norm=1.0,
     )
+
+
+@configclass
+class ShortPPORunnerCfg(BasePPORunnerCfg):
+    """BasePPORunnerCfg with 15k instead of 50k iterations.
+
+    Both G1 29-dof velocity runs (2026-11-18 base, 2026-11-19 steady) had every tracking metric,
+    episode length and the action noise flat by ~10-13k iterations; 15k-50k changed nothing but
+    the gait reward (0.50 -> 0.56). 15k is ~4.5 h on the RTX 4090 instead of ~15 h.
+    """
+
+    max_iterations = 15000
