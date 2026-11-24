@@ -18,7 +18,8 @@ from isaaclab.utils import configclass
 from unitree_rl_lab.assets.robots import unitree_actuators
 
 UNITREE_MODEL_DIR = "path/to/unitree_model"  # Replace with the actual path to your unitree_model directory
-UNITREE_ROS_DIR = "/home/student/unitree_g1/unitree_ros"  # Replace with the actual path to your unitree_ros package
+# Path to the unitree_ros checkout (robots/g1_description/... URDFs). Set UNITREE_ROS_DIR to override.
+UNITREE_ROS_DIR = os.environ.get("UNITREE_ROS_DIR", "/home/student/unitree_g1/unitree_ros")
 
 
 @configclass
