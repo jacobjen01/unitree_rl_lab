@@ -73,3 +73,10 @@ datasets
 
 # Mimic
 *.npz
+
+# Local deploy policy: filled by tools/deploy_policy.sh from a training run or a saved
+# policy (config.yaml's policy_dir points here, so a fresh clone needs that script once).
+deploy/robots/g1_29dof/config/policy/velocity/my_policy/
+
+# trackio (training-curve viewer) local data
+trackio/
